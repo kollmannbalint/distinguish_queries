@@ -1,89 +1,94 @@
 #include "types.h"
-#include <vector>
 #include <string>
+#include <vector>
 #include <stack>
-
-const int K = 26;
+#include <tuple>
+#include <algorithm>
 
 struct TrieNode {
-    TrieNode* child[K];
+    int children[alphabetSize];
 
     Label label;
 
-    TrieNode() {
-        label = NONE;
-        memset(child, 0, sizeof(child));
+    TrieNode() : label(NONE){
+        std::fill(std::begin(children), std::end(children), EMPTY_NODE);
     }
 };
 
-class Trie{
+class Trie {
     public:
-        TrieNode* root;
+        std::vector<TrieNode> nodes;
 
         Trie(){
-            root = new TrieNode();
+            nodes.emplace_back();
+        }
+
+        Trie(const std::vector<std::pair<std::string, Label>> &words){
+            nodes.emplace_back();
+            for (const auto& [w, label] : words) {
+                insert(w, label);
+            }
         }
 
         void insert(const std::string &s, Label label){
-            TrieNode* cur = root;
+            int cur = 0;
             for(char ch : s){
                 int idx = ch - 'a';
 
-                if(!cur->child[idx])
-                    cur->child[idx] = new TrieNode();
+                if (nodes[cur].children[idx] == EMPTY_NODE) {
+                    nodes[cur].children[idx] = (int) nodes.size();
+                    nodes.emplace_back();
+                }
 
-                cur = cur->child[idx];
+                cur = nodes[cur].children[idx];
             }
-
-            cur->label = label;
+            
+            nodes[cur].label = label;
         }
 
-        TrieNode* lookup(const std::string &s){
-            TrieNode* cur = root;
-            for(char ch : s){
+        int lookup(const std::string &s){
+            int cur = 0;
+            for (char ch : s) {
                 int idx = ch - 'a';
-                if(!cur->child[idx]) 
-                    return nullptr;
-                cur = cur->child[idx];
+
+                cur = nodes[cur].children[idx];
+                if (cur == EMPTY_NODE)
+                    return EMPTY_NODE;
             }
+
             return cur;
         }
 
-        std::string distinguish(const std::string &w1, const std::string &w2){
-            TrieNode* pref_node1, * pref_node2;
+        std::string distinguish(const std::string &s1, const std::string &s2){
+            int pref_node1 = lookup(s1); 
+            int pref_node2 = lookup(s2);
 
-            if(!(pref_node1 = lookup(w1)) || !(pref_node2 = lookup(w2)))
-                return nullptr;
+            if(pref_node1 == EMPTY_NODE || pref_node2 == EMPTY_NODE)
+                return "#";
 
             std::string distinguishing_suffix = "";
-            std::stack<TrieNode*> dfs_stack1;
-            dfs_stack1.push(pref_node1);
-            std::stack<TrieNode*> dfs_stack2;
-            dfs_stack2.push(pref_node2);
-            std::string char_stack = "$";
+            std::stack<std::tuple<int, int, char>> dfs_stack;
+            dfs_stack.push({pref_node1, pref_node2, '$'});
 
-            while(!dfs_stack1.empty()){
-                TrieNode* cur_node1 = dfs_stack1.top();
-                dfs_stack1.pop();
-                TrieNode* cur_node2 = dfs_stack2.top();
-                dfs_stack2.pop();
-                distinguishing_suffix.push_back(char_stack.back());
-                char_stack.pop_back();
+            
 
-                if(isContradiction(cur_node1->label, cur_node2->label))
+            while(!dfs_stack.empty()){
+                auto [cur_node1, cur_node2, cur_char] = dfs_stack.top();
+                dfs_stack.pop();
+                distinguishing_suffix.push_back(cur_char);
+
+                if(isContradiction(nodes[cur_node1].label, nodes[cur_node2].label))
                     return distinguishing_suffix;
 
-                for(int i=0;i<K;i++){
-                    if(cur_node1->child[i] != nullptr && cur_node2->child[i] != nullptr){
-                        dfs_stack1.push(cur_node1->child[i]);
-                        dfs_stack2.push(cur_node2->child[i]);
-                        char_stack.push_back('a' + i);
+                for(int i=0;i<alphabetSize;i++){
+                    if(nodes[cur_node1].children[i] != EMPTY_NODE && nodes[cur_node2].children[i] != EMPTY_NODE){
+                        dfs_stack.push({nodes[cur_node1].children[i], nodes[cur_node2].children[i], 'a' + i});
                     }
                 }
 
                 distinguishing_suffix.pop_back();
             }
 
-            return nullptr;
+            return "#";
         }
 };

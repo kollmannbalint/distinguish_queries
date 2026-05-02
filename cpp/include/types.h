@@ -9,3 +9,6 @@ enum Label {
 inline bool isContradiction(Label a, Label b){
     return a * b == -1;
 }
+
+constexpr int alphabetSize = 26;
+constexpr int EMPTY_NODE = -1;
