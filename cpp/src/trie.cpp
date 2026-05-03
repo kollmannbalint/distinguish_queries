@@ -32,7 +32,7 @@ class Trie {
 
         void insert(const std::string &s, Label label){
             int cur = 0;
-            for(char ch : s){
+            for(char ch : s) {
                 int idx = ch - 'a';
 
                 if (nodes[cur].children[idx] == EMPTY_NODE) {
