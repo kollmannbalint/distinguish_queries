@@ -12,3 +12,7 @@ inline bool isContradiction(Label a, Label b){
 
 constexpr int alphabetSize = 26;
 constexpr int EMPTY_NODE = -1;
+
+long long ii_to_ll(long long a, long long b){
+    return (a << 32) | b;
+}

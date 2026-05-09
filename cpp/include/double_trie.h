@@ -2,36 +2,30 @@
 #include <string>
 #include <vector>
 
-struct PrefixTrieNode {
+struct DoubleTrieNode {
     int children[alphabetSize];
     int parent;
     char char_from_par;
 
-    std::vector<int> positive_suffixes;
-    std::vector<int> negative_suffixes;
+    std::vector<int> positive_links;
+    std::vector<int> negative_links;
     
 
-    PrefixTrieNode();
-};
-
-struct SuffixTrieNode {
-    int children[alphabetSize];
-
-    SuffixTrieNode();
+    DoubleTrieNode();
 };
 
 class DoubleTrie {
     public:
-        std::vector<PrefixTrieNode> prefix_nodes;
-        std::vector<SuffixTrieNode> suffix_nodes;
+        std::vector<DoubleTrieNode> prefix_nodes;
+        std::vector<DoubleTrieNode> suffix_nodes;
 
         DoubleTrie();
+        DoubleTrie(const std::vector<std::pair<std::string, Label>> &words);
 
         void insert(const std::string &s, Label label);
 
-        std::vector<int> insert_to_pref_trie(const std::string &s);
+        std::vector<int> insert_to_trie(std::vector<DoubleTrieNode> &trie_nodes, const std::string &s);
 
-        std::vector<int> insert_to_suf_trie(const std::string &s);
-
-        int lookup(const std::string &s);
+        int lookup(const std::vector<DoubleTrieNode> &trie, const std::string &s) const;
+        std::string get_word(const std::vector<DoubleTrieNode> &trie, int id) const;
 };

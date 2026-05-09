@@ -1,10 +1,4 @@
-#include "types.h"
 #include "trie.h"
-#include <string>
-#include <vector>
-#include <stack>
-#include <tuple>
-#include <algorithm>
 
 
 TrieNode::TrieNode() : label(NONE){
