@@ -53,7 +53,11 @@ std::vector<int> DoubleTrie::insert_to_trie(std::vector<DoubleTrieNode> &trie, c
             trie.emplace_back();
         }
 
+        int prv = cur;
         cur = trie[cur].children[idx];
+        trie[cur].parent = prv;
+        trie[cur].char_from_par = ch;
+
         path.push_back(cur);
     }
     
