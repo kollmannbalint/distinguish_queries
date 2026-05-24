@@ -1,8 +1,7 @@
-#include "trie.h"
 #include "distinguish_ds_naiv.h"
 
-void DistinguishDsNaiv::build(const std::vector<std::pair<std::string, Label>>& words){
-    trie = Trie(words);
+void DistinguishDsNaiv::build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words){
+    trie = Trie(positive_words, negative_words);
 }
 
 std::string DistinguishDsNaiv::query(const std::string& s1, const std::string& s2) const {

@@ -1,5 +1,3 @@
-#include "types.h"
-#include "double_trie.h"
 #include "distinguish_ds_sqrt.h"
 #include <algorithm>
 
@@ -19,8 +17,8 @@ int find_common_element_with_hist(const std::vector<int> &v){
     return -1;
 }
 
-void DistinguishDsSqrt::build(const std::vector<std::pair<std::string, Label>>& words){
-    trie = DoubleTrie(words);
+void DistinguishDsSqrt::build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) {
+    trie = DoubleTrie(positive_words, negative_words);
     link_hist = std::vector<int>(trie.suffix_nodes.size(), 0);
 
     for(DoubleTrieNode &node : trie.prefix_nodes){

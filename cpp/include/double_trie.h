@@ -20,7 +20,7 @@ class DoubleTrie {
         std::vector<DoubleTrieNode> suffix_nodes;
 
         DoubleTrie();
-        DoubleTrie(const std::vector<std::pair<std::string, Label>> &words);
+        DoubleTrie(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words);
 
         void insert(const std::string &s, Label label);
 

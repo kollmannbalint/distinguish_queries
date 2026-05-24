@@ -1,5 +1,6 @@
 #include "double_trie.h"
-
+#include <algorithm>
+#include <iostream>
 
 DoubleTrieNode::DoubleTrieNode() {
     parent = EMPTY_NODE;
@@ -9,21 +10,37 @@ DoubleTrieNode::DoubleTrieNode() {
 
 DoubleTrie::DoubleTrie(){
     prefix_nodes.emplace_back();
-    prefix_nodes.emplace_back();  
+    suffix_nodes.emplace_back();  
 }
 
-DoubleTrie::DoubleTrie(const std::vector<std::pair<std::string, Label>> &words){
+DoubleTrie::DoubleTrie(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words){
     prefix_nodes.emplace_back();
-    prefix_nodes.emplace_back();
-    for (const auto& [w, label] : words) {
-        insert(w, label);
+    suffix_nodes.emplace_back();
+
+    for(const std::string s : positive_words){
+        insert(s, POSITIVE);
     }
+
+     for (const std::string s : negative_words) {
+        insert(s, NEGATIVE);
+    }
+}
+
+void printvec(std::vector<int> v){
+    for(int x : v) std::cout << x << ' ';
 }
 
 void DoubleTrie::insert(const std::string &s, Label label){
     std::vector<int> prefix_path = insert_to_trie(prefix_nodes, s);
-    std::vector<int> suffix_path = insert_to_trie(suffix_nodes, s);
+    std::string t = s;
+    std::reverse(t.begin(), t.end());
+    std::vector<int> suffix_path = insert_to_trie(suffix_nodes, t);
     std::reverse(prefix_path.begin(), prefix_path.end());
+    // std::cout << "new word\n";
+    // printvec(prefix_path);
+    // std::cout << "\n";
+    // printvec(suffix_path);
+    // std::cout << std::endl;
 
     for(int i = 0; i < prefix_path.size(); i++) {
         int pref_idx = prefix_path[i];
@@ -51,13 +68,12 @@ std::vector<int> DoubleTrie::insert_to_trie(std::vector<DoubleTrieNode> &trie, c
         if (trie[cur].children[idx] == EMPTY_NODE) {
             trie[cur].children[idx] = (int) trie.size();
             trie.emplace_back();
+            int nxt = trie[cur].children[idx];
+            trie[nxt].parent = cur;
+            trie[nxt].char_from_par = ch;
         }
 
-        int prv = cur;
         cur = trie[cur].children[idx];
-        trie[cur].parent = prv;
-        trie[cur].char_from_par = ch;
-
         path.push_back(cur);
     }
     
