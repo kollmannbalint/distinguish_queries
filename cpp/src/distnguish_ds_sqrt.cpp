@@ -1,14 +1,15 @@
 #include "distinguish_ds_sqrt.h"
 #include <algorithm>
+#include <cmath>
 
 std::vector<int> link_hist;
 
-void fill_hist(const std::vector<int> &v, int val){
+inline void fill_hist(const std::vector<int> &v, int val){
     for(int x : v)
         link_hist[x] = val;
 }
 
-int find_common_element_with_hist(const std::vector<int> &v){
+inline int find_common_element_with_hist(const std::vector<int> &v){
     for(int x:v){
         if(link_hist[x] != 0)
             return x;
@@ -20,31 +21,23 @@ int find_common_element_with_hist(const std::vector<int> &v){
 void DistinguishDsSqrt::build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) {
     trie = DoubleTrie(positive_words, negative_words);
     link_hist = std::vector<int>(trie.suffix_nodes.size(), 0);
-
-    for(DoubleTrieNode &node : trie.prefix_nodes){
-        std::sort(node.positive_links.begin(), node.positive_links.end());
-        std::sort(node.negative_links.begin(), node.negative_links.end());
-    }
-
-    for(DoubleTrieNode &node : trie.suffix_nodes){
-        std::sort(node.positive_links.begin(), node.positive_links.end());
-        std::sort(node.negative_links.begin(), node.negative_links.end());
-    }
+    threshold = (int)std::sqrt(trie.prefix_nodes.size() + trie.suffix_nodes.size());
 
     //in intersecting_pairs, the first key is positive, the second key is negative
     intersecting_pairs = std::unordered_map<long long, int>();
 
-    for(int i = 0; trie.prefix_nodes.size(); i++){
+    for(int i = 0; i < trie.prefix_nodes.size(); i++){
 
         const DoubleTrieNode &node = trie.prefix_nodes[i];
         
         if(node.positive_links.size() >= threshold){
             fill_hist(node.positive_links, 1);
 
-            for(int j = 0; trie.prefix_nodes.size(); j++){
-                if(i == j)
-                    continue;
+            for(int j = 0; j < trie.prefix_nodes.size(); j++){
                 const DoubleTrieNode &node2 = trie.prefix_nodes[j];
+                if(i == j || node2.negative_links.size() < threshold)
+                    continue;
+                
                 int common_element = find_common_element_with_hist(node2.negative_links);
                 if(common_element != -1)
                     intersecting_pairs.insert({ii_to_ll(i, j), common_element});
@@ -56,10 +49,11 @@ void DistinguishDsSqrt::build(const std::vector<std::string> &positive_words, co
         if(node.negative_links.size() >= threshold){
             fill_hist(node.negative_links, 1);
 
-            for(int j = 0; trie.prefix_nodes.size(); j++){
-                if(i == j)
-                    continue;
+            for(int j = 0; j < trie.prefix_nodes.size(); j++){
                 const DoubleTrieNode &node2 = trie.prefix_nodes[j];
+                if(i == j || node2.positive_links.size() < threshold)
+                    continue;
+                
                 int common_element = find_common_element_with_hist(node2.positive_links);
                 if(common_element != -1)
                     intersecting_pairs.insert({ii_to_ll(j, i), common_element});
@@ -70,52 +64,58 @@ void DistinguishDsSqrt::build(const std::vector<std::string> &positive_words, co
     }
 }
 
-int intersect_small(const std::vector<int>& a, const std::vector<int>& b) {
-    int i = 0, j = 0;
-
-    while(i < a.size() && j < b.size()){
-        if(a[i] == b[j])
-            return a[i];
-
-        if(a[i] < b[j])
-            ++i;
-        else
-            ++j;
-    }
-
-    return -1;
-}
-
 int DistinguishDsSqrt::intersect(const int n1, const int n2) const {
 
-    bool is_n1_pos_big = trie.prefix_nodes[n1].positive_links.size() >= threshold;
-    bool is_n1_neg_big = trie.prefix_nodes[n1].negative_links.size() >= threshold;
-    bool is_n2_pos_big = trie.prefix_nodes[n2].positive_links.size() >= threshold;
-    bool is_n2_neg_big = trie.prefix_nodes[n2].negative_links.size() >= threshold;
+    const DoubleTrieNode &node1 = trie.prefix_nodes[n1];
+    const DoubleTrieNode &node2 = trie.prefix_nodes[n2];
+
+    bool is_n1_pos_big = node1.positive_links.size() >= threshold;
+    bool is_n1_neg_big = node1.negative_links.size() >= threshold;
+    bool is_n2_pos_big = node2.positive_links.size() >= threshold;
+    bool is_n2_neg_big = node2.negative_links.size() >= threshold;
 
     //the positive set is the first key, the negative set is the second key for intersecting_pairs
-    if(is_n1_pos_big || is_n2_neg_big){
+
+    //check large sets
+    if(is_n1_pos_big && is_n2_neg_big){
         auto it = intersecting_pairs.find(ii_to_ll(n1, n2));
         if(it != intersecting_pairs.end())
             return it->second;
     }
 
-    if(is_n1_neg_big || is_n2_pos_big){
+    if(is_n1_neg_big && is_n2_pos_big){
         auto it = intersecting_pairs.find(ii_to_ll(n2, n1));
         if(it != intersecting_pairs.end())
             return it->second;
     }
 
-    if(!is_n1_pos_big && !is_n2_neg_big){
-        int res = intersect_small(trie.prefix_nodes[n1].positive_links, trie.prefix_nodes[n2].negative_links);
-        if(res != -1)
-            return res;
+    //check small sets
+    if(!is_n1_pos_big){
+        for(int x : node1.positive_links){
+            if(node2.negative_link_set.find(x) != node2.negative_link_set.end())
+                return x;
+        }
     }
 
-    if(!is_n1_neg_big && !is_n2_pos_big){
-        int res = intersect_small(trie.prefix_nodes[n2].positive_links, trie.prefix_nodes[n1].negative_links);
-        if(res != -1)
-            return res;
+    if(!is_n1_neg_big){
+        for(int x : node1.negative_links){
+            if(node2.positive_link_set.find(x) != node2.positive_link_set.end())
+                return x;
+        }
+    }
+
+    if(!is_n2_pos_big && is_n1_neg_big){
+        for(int x : node2.positive_links){
+            if(node1.negative_link_set.find(x) != node1.negative_link_set.end())
+                return x;
+        }
+    }
+
+    if(!is_n2_neg_big && is_n1_pos_big){
+        for(int x : node2.negative_links){
+            if(node1.positive_link_set.find(x) != node1.positive_link_set.end())
+                return x;
+        }
     }
 
     return -1;

@@ -10,7 +10,6 @@ void DistinguishDsPrecomp::build(const std::vector<std::string> &positive_words,
         for (int p : node.positive_links)
             for (int n : node.negative_links){
                 intersecting_pairs.insert({ii_to_ll(p,n),idx});
-                //std::cout << p << ' ' << n << ' ' << idx << std::endl;
             }
                 
         ++idx;
@@ -21,8 +20,6 @@ void DistinguishDsPrecomp::build(const std::vector<std::string> &positive_words,
 std::string DistinguishDsPrecomp::query(const std::string &s1, const std::string &s2) const {
     int n1 = trie.lookup(trie.prefix_nodes, s1);
     int n2 = trie.lookup(trie.prefix_nodes, s2);
-
-    //std::cout << n1 << ' ' << n2 << ' ' << std::endl;
 
     if(n1 == EMPTY_NODE || n2 == EMPTY_NODE)
         return "#";

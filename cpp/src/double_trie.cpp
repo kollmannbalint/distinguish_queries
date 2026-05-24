@@ -36,11 +36,6 @@ void DoubleTrie::insert(const std::string &s, Label label){
     std::reverse(t.begin(), t.end());
     std::vector<int> suffix_path = insert_to_trie(suffix_nodes, t);
     std::reverse(prefix_path.begin(), prefix_path.end());
-    // std::cout << "new word\n";
-    // printvec(prefix_path);
-    // std::cout << "\n";
-    // printvec(suffix_path);
-    // std::cout << std::endl;
 
     for(int i = 0; i < prefix_path.size(); i++) {
         int pref_idx = prefix_path[i];
@@ -48,10 +43,15 @@ void DoubleTrie::insert(const std::string &s, Label label){
         if(label == POSITIVE){
             prefix_nodes[pref_idx].positive_links.push_back(suf_idx);
             suffix_nodes[suf_idx].positive_links.push_back(pref_idx);
+            prefix_nodes[pref_idx].positive_link_set.insert(suf_idx);
+            //the link sets of suffix nodes are not used anywhere, so they are not filled
+            //suffix_nodes[suf_idx].positive_link_set.insert(pref_idx);
         }
         else if(label == NEGATIVE){
             prefix_nodes[pref_idx].negative_links.push_back(suf_idx);
             suffix_nodes[suf_idx].negative_links.push_back(pref_idx);
+            prefix_nodes[pref_idx].negative_link_set.insert(suf_idx);
+            //the link sets of suffix nodes are not used anywhere, so they are not filled
         }
     }
 }

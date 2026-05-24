@@ -1,6 +1,9 @@
+#pragma once
+
 #include "types.h"
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 struct DoubleTrieNode {
     int children[alphabetSize];
@@ -9,7 +12,8 @@ struct DoubleTrieNode {
 
     std::vector<int> positive_links;
     std::vector<int> negative_links;
-    
+    std::unordered_set<int> positive_link_set;
+    std::unordered_set<int> negative_link_set;
 
     DoubleTrieNode();
 };

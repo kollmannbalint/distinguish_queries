@@ -5,6 +5,7 @@
 #include "../include/distinguish_ds_abstract.h"
 #include "../include/distinguish_ds_naiv.h"
 #include "../include/distinguish_ds_precomp.h"
+#include "../include/distinguish_ds_sqrt.h"
 
 int main() {
     int n;
@@ -31,16 +32,17 @@ int main() {
         std::cin >> queries[i].first >> queries[i].second;
     }
 
-    DistinguishDsPrecomp naiv_ds = DistinguishDsPrecomp();
+    DistinguishDsSqrt ds = DistinguishDsSqrt();
+    
 
     std::vector<std::string> answers(q);
 
     //start timer
 
-    naiv_ds.build(positive, negative);
+    ds.build(positive, negative);
 
     for(int i = 0; i < q; i++)
-        answers[i] = naiv_ds.query(queries[i].first, queries[i].second);
+        answers[i] = ds.query(queries[i].first, queries[i].second);
     
 
     //end timer
