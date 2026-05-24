@@ -104,11 +104,19 @@ def check(P, N, queries, answers):
     return True
 
 
-for _ in range(1000):
+for _ in range(3):
     inp, P, N, queries = generate()
 
     cpp_out = run_cpp(inp)
-    answers = cpp_out.strip().split()
+    cpp_out_list = cpp_out.strip().split()
+    build_time = cpp_out_list[0]
+    query_time = cpp_out_list[1]
+    memory_usage = cpp_out_list[2]
+    answers = cpp_out_list[3:]
+
+    # print("build time", build_time)
+    # print("query time", query_time)
+    # print("memory usage", memory_usage)
 
     if not check(P, N, queries, answers):
         print("MISMATCH FOUND")
@@ -135,3 +143,5 @@ bbbaa
 bbbaa
 bbabb
 """
+
+#tests here: https://abbadingo.cs.nuim.ie/data-sets.html
