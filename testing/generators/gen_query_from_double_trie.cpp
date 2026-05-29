@@ -5,7 +5,11 @@
 #include <algorithm>
 #include <random>
 
-std::mt19937 gen(8324932);
+int max_queries = 120;
+int max_tot_word_length = 2000;
+int randseed = 8324932;
+
+std::mt19937 gen;
 
 int random_int(int low, int high) {
     std::uniform_int_distribution<> dist(low, high);
@@ -13,6 +17,9 @@ int random_int(int low, int high) {
 }
 
 int main(){
+    std::cin >> randseed >> max_queries >> max_tot_word_length;
+    gen.seed(randseed);
+
     int n;
     std::cin >> n;
     std::vector<std::string> positive(n);
@@ -40,9 +47,6 @@ int main(){
 
     int cnt_queries = 0;
     int tot_word_length = 0;
-
-    int max_queries = 120;
-    int max_tot_word_length = 2000;
 
     while(!distinguishable_suffix_nodes.empty() && cnt_queries < max_queries && tot_word_length < max_tot_word_length){
         int suf_id = random_int(0, distinguishable_suffix_nodes.size() - 1);

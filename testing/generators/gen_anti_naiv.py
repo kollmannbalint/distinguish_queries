@@ -12,7 +12,7 @@ def anti_naiv_traces():
 
     def unique_word():
         while True:
-            w = ''.join(random.choice("ab") for _ in range(random.randint(3, 6)))
+            w = ''.join(random.choice("ab") for _ in range(randWordLen))
             w = w[0] + "b" + w[2:]
             if w not in used:
                 used.add(w)
