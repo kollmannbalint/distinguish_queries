@@ -42,17 +42,23 @@ int main(){
     
     for(int i = 0; i < dt.suffix_nodes.size();i++){
         const DoubleTrieNode &node = dt.suffix_nodes[i];
-        if(!node.positive_links.empty() && !node.negative_links.empty());
+        if(!node.positive_links.empty() && !node.negative_links.empty()){
+            distinguishable_suffix_nodes.push_back(i);
+        }
     }
 
     int cnt_queries = 0;
     int tot_word_length = 0;
 
     while(!distinguishable_suffix_nodes.empty() && cnt_queries < max_queries && tot_word_length < max_tot_word_length){
-        int suf_id = random_int(0, distinguishable_suffix_nodes.size() - 1);
-        DoubleTrieNode &node =  dt.suffix_nodes[ distinguishable_suffix_nodes[suf_id] ];
-        int pref1_id = random_int(0, node.positive_links.size() - 1);
-        int pref2_id = random_int(0, node.negative_links.size() - 1);
+        int suf_id = distinguishable_suffix_nodes[random_int(0, distinguishable_suffix_nodes.size() - 1)];
+        DoubleTrieNode &node =  dt.suffix_nodes[suf_id];
+        int pref1_id = node.positive_links[random_int(0, node.positive_links.size() - 1)];
+        int pref2_id = node.negative_links[random_int(0, node.negative_links.size() - 1)];
+
+        //make sure that the empty prefix is not generated (and we also not end up in an infinite loop, if empty prefix must be generated)
+        ++cnt_queries;
+        if(pref1_id == 0 || pref2_id == 0) continue;
 
         int ord = random_int(0,1);
         if(ord) std::swap(pref1_id, pref2_id);
@@ -65,7 +71,7 @@ int main(){
 
         std::cout << w1 << ' ' << w2 << '\n';
 
-        ++cnt_queries;
+        
         tot_word_length += w1.size() + w2.size();
     }
 }
