@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <chrono>
 
@@ -14,19 +15,41 @@
 #include "../include/distinguish_ds_precomp.h"
 #include "../include/distinguish_ds_sqrt.h"
 
-static size_t getPeakRSS() {
-    PROCESS_MEMORY_COUNTERS info;
+// static size_t getPeakRSS() {
+//     PROCESS_MEMORY_COUNTERS info;
 
-    GetProcessMemoryInfo(
-        GetCurrentProcess(),
-        &info,
-        sizeof(info)
-    );
+//     GetProcessMemoryInfo(
+//         GetCurrentProcess(),
+//         &info,
+//         sizeof(info)
+//     );
 
-    return info.PeakWorkingSetSize;
-}
+//     return info.PeakWorkingSetSize;
+// }
 
-int main() {
+int main(int argc, char* argv[]) {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+
+    if(argc != 2)
+        return 1;
+
+    std::string impl = argv[1];
+
+    std::unique_ptr<DistinguishDsAbstract> ds;
+
+    if(impl == "naive")
+        ds = std::make_unique<DistinguishDsNaiv>();
+    else if(impl == "precomp")
+        ds = std::make_unique<DistinguishDsPrecomp>();
+    else if(impl == "sqrt")
+        ds = std::make_unique<DistinguishDsSqrt>();
+    else{
+        std::cerr << "Unknown implementation: " << impl << '\n';
+        return 1;
+    }
+
+
     int n;
     std::cin >> n;
     std::vector<std::string> positive(n);
@@ -50,23 +73,21 @@ int main() {
     for(int i = 0; i < q; i++) {
         std::cin >> queries[i].first >> queries[i].second;
     }
-
-    DistinguishDsSqrt ds = DistinguishDsSqrt();
     
 
-    std::vector<std::string> answers(q);
+    //std::vector<std::string> answers(q);
 
     using Clock = std::chrono::high_resolution_clock;
     auto build_start = Clock::now();
-
-    ds.build(positive, negative);
-
+    ds->build(positive, negative);
     auto build_end = Clock::now();
-
     auto query_start = Clock::now();
 
+    size_t tot_length = 0;
+
     for(int i = 0; i < q; i++)
-        answers[i] = ds.query(queries[i].first, queries[i].second);
+        tot_length += ds->query(queries[i].first, queries[i].second).size();
+        //answers[i] = ds->query(queries[i].first, queries[i].second);
     
     auto query_end = Clock::now();
 
@@ -80,13 +101,13 @@ int main() {
             std::chrono::microseconds
         >(query_end - query_start).count();
 
-    size_t peak_bytes = getPeakRSS();
+
+    size_t ds_memory = ds->memory_usage();
+
+    std::cerr << build_time << '\n' << query_time << '\n' << ds_memory << '\n' << tot_length << '\n';
 
 
-    std::cout << build_time << '\n' << query_time << '\n' << peak_bytes << '\n';
-
-
-    for(int i = 0; i < q; i++) {
-        std::cout << (answers[i] != "" ? answers[i] : "$") << '\n';
-    }
+    // for(int i = 0; i < q; i++) {
+    //     std::cout << (answers[i] != "" ? answers[i] : "$") << '\n';
+    // }
 }

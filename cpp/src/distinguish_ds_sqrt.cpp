@@ -135,3 +135,14 @@ std::string DistinguishDsSqrt::query(const std::string &s1, const std::string &s
     
     return trie.get_word(trie.suffix_nodes, suffix_idx);
 }
+
+size_t DistinguishDsSqrt::memory_usage() const {
+    size_t total = 0;
+
+    total += sizeof(int);
+    total += trie.memory_usage();
+    total += intersecting_pairs.bucket_count() * sizeof(void*);
+    total += intersecting_pairs.size() * sizeof(std::pair<const long long, int>);
+
+    return total;
+}

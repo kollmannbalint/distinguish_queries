@@ -8,6 +8,20 @@ DoubleTrieNode::DoubleTrieNode() {
     std::fill(std::begin(children), std::end(children), EMPTY_NODE);
 }
 
+size_t DoubleTrieNode::memory_usage_dynamic() const {
+    size_t total = 0;
+
+    total += positive_links.capacity() * sizeof(int);
+    total += negative_links.capacity() * sizeof(int);
+    total += positive_link_set.bucket_count() * sizeof(void*);
+    total += negative_link_set.bucket_count() * sizeof(void*);
+    total += positive_link_set.size() * sizeof(int);
+    total += negative_link_set.size() * sizeof(int);
+
+
+    return total;
+}
+
 DoubleTrie::DoubleTrie(){
     prefix_nodes.emplace_back();
     suffix_nodes.emplace_back();  
@@ -100,4 +114,19 @@ std::string DoubleTrie::get_word(const std::vector<DoubleTrieNode> &trie, int id
         id = trie[id].parent;
     }
     return word;
+}
+
+size_t DoubleTrie::memory_usage() const {
+    size_t total = 0;
+
+    total += prefix_nodes.capacity() * sizeof(DoubleTrieNode);
+    total += suffix_nodes.capacity() * sizeof(DoubleTrieNode);
+
+    for (const auto& node : prefix_nodes)
+        total += node.memory_usage_dynamic();
+
+    for (const auto& node : suffix_nodes)
+        total += node.memory_usage_dynamic();
+
+    return total;
 }

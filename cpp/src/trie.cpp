@@ -89,3 +89,7 @@ std::string Trie::distinguish(const std::string &s1, const std::string &s2) cons
     
     return distinguishing_suffix;
 }
+
+size_t Trie::memory_usage() const {
+    return nodes.capacity() * sizeof(TrieNode);
+}

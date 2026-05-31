@@ -36,3 +36,13 @@ std::string DistinguishDsPrecomp::query(const std::string &s1, const std::string
 
     return "#";
 }
+
+size_t DistinguishDsPrecomp::memory_usage() const {
+    size_t total = 0;
+
+    total += trie.memory_usage();
+    total += intersecting_pairs.bucket_count() * sizeof(void*);
+    total += intersecting_pairs.size() * sizeof(std::pair<const long long, int>);
+
+    return total;
+}

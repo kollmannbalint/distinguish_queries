@@ -7,3 +7,7 @@ void DistinguishDsNaiv::build(const std::vector<std::string> &positive_words, co
 std::string DistinguishDsNaiv::query(const std::string& s1, const std::string& s2) const {
     return trie.distinguish(s1, s2);
 }
+
+size_t DistinguishDsNaiv::memory_usage() const {
+    return trie.memory_usage();
+}
