@@ -17,6 +17,9 @@ int random_int(int low, int high) {
 }
 
 int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+
     std::cin >> randseed >> max_queries >> max_tot_word_length;
     gen.seed(randseed);
 
@@ -40,7 +43,7 @@ int main(){
 
     std::vector<int> distinguishable_suffix_nodes;
     
-    for(int i = 0; i < dt.suffix_nodes.size();i++){
+    for(int i = 0; i < dt.suffix_nodes.size(); i++){
         const DoubleTrieNode &node = dt.suffix_nodes[i];
         if(!node.positive_links.empty() && !node.negative_links.empty()){
             distinguishable_suffix_nodes.push_back(i);

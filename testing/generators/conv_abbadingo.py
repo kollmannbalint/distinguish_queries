@@ -6,7 +6,8 @@ RAW_DIR = os.path.join(BASE_DIR, "data", "raw", "abbadingo")
 TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "traces")
 QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "queries")
 
-FILENAMES = ["small_test"]#["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
+FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
+#FILENAMES = ["small_test"]
 
 FILE_PATHS_RAW_ABBADINGO = [os.path.join(RAW_DIR, fname) for fname in FILENAMES]
 FILE_PATHS_TRACES = [os.path.join(TRACE_DIR, fname + ".txt") for fname in FILENAMES]
@@ -14,8 +15,8 @@ FILE_PATHS_QUERIES = [os.path.join(QUERY_DIR, fname + ".txt") for fname in FILEN
 EXE = os.path.join(BASE_DIR, "cpp", "build", "Debug", "gen_query.exe")
 
 RSEED = 8324932
-MAX_TOT_WORD_LENGTH = 1000
-MAX_QUERIES = 300
+MAX_TOT_WORD_LENGTH = 200000
+MAX_QUERIES = 100000
 
 # print(FILE_PATHS_RAW_ABBADINGO)
 # print(FILE_PATHS_TRACES)
@@ -62,7 +63,7 @@ def run_cpp(inp):
         input=inp,
         text=True,
         capture_output=True,
-        timeout=2
+        timeout=200
     ).stdout.strip()
 
 
