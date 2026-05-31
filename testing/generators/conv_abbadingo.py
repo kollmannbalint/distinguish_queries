@@ -12,7 +12,7 @@ FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "trai
 FILE_PATHS_RAW_ABBADINGO = [os.path.join(RAW_DIR, fname) for fname in FILENAMES]
 FILE_PATHS_TRACES = [os.path.join(TRACE_DIR, fname + ".txt") for fname in FILENAMES]
 FILE_PATHS_QUERIES = [os.path.join(QUERY_DIR, fname + ".txt") for fname in FILENAMES]
-EXE = os.path.join(BASE_DIR, "cpp", "build", "Debug", "gen_query.exe")
+EXE = os.path.join(BASE_DIR, "cpp", "build", "Release", "gen_query.exe")
 
 RSEED = 8324932
 MAX_TOT_WORD_LENGTH = 200000

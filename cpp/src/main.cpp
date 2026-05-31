@@ -104,7 +104,18 @@ int main(int argc, char* argv[]) {
 
     size_t ds_memory = ds->memory_usage();
 
-    std::cerr << build_time << '\n' << query_time << '\n' << ds_memory << '\n' << tot_length << '\n';
+    //Optionl todo: maybe also output total nodes, links and nodes in the distinguishing trie sets
+
+    std::cout
+        << impl << ","
+        << n << ","
+        << m << ","
+        << q << ","
+        << build_time << ","
+        << query_time << ","
+        << ds_memory << ","
+        << tot_length
+        << "\n";
 
 
     // for(int i = 0; i < q; i++) {
