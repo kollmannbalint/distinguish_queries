@@ -29,6 +29,8 @@ int main(){
 
     for(int i = 0; i < n; i++) {
         std::cin>>positive[i];
+        if(positive[i] == "$")
+            positive[i] = "";
     }
 
     int m;
@@ -37,6 +39,8 @@ int main(){
 
     for(int i = 0; i < m; i++) {
         std::cin>>negative[i];
+        if(negative[i] == "$")
+            negative[i] = "";
     }
 
     DoubleTrie dt = DoubleTrie(positive, negative);
@@ -59,9 +63,7 @@ int main(){
         int pref1_id = node.positive_links[random_int(0, node.positive_links.size() - 1)];
         int pref2_id = node.negative_links[random_int(0, node.negative_links.size() - 1)];
 
-        //make sure that the empty prefix is not generated (and we also not end up in an infinite loop, if empty prefix must be generated)
         ++cnt_queries;
-        if(pref1_id == 0 || pref2_id == 0) continue;
 
         int ord = random_int(0,1);
         if(ord) std::swap(pref1_id, pref2_id);
@@ -71,6 +73,11 @@ int main(){
 
         std::string w2 = dt.get_word(dt.prefix_nodes, pref2_id);
         std::reverse(w2.begin(), w2.end());
+
+        if(w1 == "")
+            w1 = "$";
+        if(w2 == "")
+            w2 = "$";
 
         std::cout << w1 << ' ' << w2 << '\n';
 

@@ -38,8 +38,10 @@ def conv_abbadingo(path):
             label = parts[0]
             k = parts[1]
             trace = parts[2:]
-
-            trace_str = ''.join(chr(ord('a') + x) for x in trace)
+            trace_str = "$"
+            
+            if k != 0:
+                trace_str = ''.join(chr(ord('a') + x) for x in trace)
 
             if label == 1:
                 P.append(trace_str)
@@ -78,7 +80,7 @@ def conv_abbadingo_dataset():
         with open(foutp, 'w') as f:    
             f.write(outp)
 
-#conv_abbadingo_dataset()
+conv_abbadingo_dataset()
 
 def gen_queries(rseed, max_queries, max_tot_word_length):
     for i in range(len(FILENAMES)):

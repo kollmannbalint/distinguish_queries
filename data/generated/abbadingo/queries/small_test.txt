@@ -1,4 +1,1 @@
-3
-aa b
-ab baa
-aaa a
+0

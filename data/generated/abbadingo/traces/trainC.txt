@@ -12630,7 +12630,7 @@ aaabbbbabaaaababaab
 abbbbbbabbabbbaaab
 baabbabbabbababbaaa
 aabbaaaabaaaabbbaba
-
+$
 aaabbbababbbbababa
 abbaabbbaabbbabaaaa
 bbaabaaabbbaaaaabab
