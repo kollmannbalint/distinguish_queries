@@ -36,8 +36,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    //std::cerr << "Start the program" << '\n';
-
     std::string impl = argv[1];
 
     std::unique_ptr<DistinguishDsAbstract> ds;
@@ -74,14 +72,9 @@ int main(int argc, char* argv[]) {
             negative[i] = "";
     }
 
-    //std::cerr << "Read traces done" << '\n';
-
     int q;
     std::cin >> q;
-    std::cout << q << ' ' << "val of q" << '\n';
     std::vector<std::pair<std::string, std::string>> queries(q);
-
-    //std::cerr << "Create queries" << '\n';
 
     for(int i = 0; i < q; i++) {
         std::cin >> queries[i].first >> queries[i].second;
@@ -91,7 +84,6 @@ int main(int argc, char* argv[]) {
             queries[i].second = "";
     }
     
-    //std::cerr << "Read data done" << '\n';
 
     //std::vector<std::string> answers(q);
 
@@ -99,8 +91,6 @@ int main(int argc, char* argv[]) {
     auto build_start = Clock::now();
     ds->build(positive, negative);
     auto build_end = Clock::now();
-
-    std::cerr << "Build data structure done" << '\n';
 
     auto query_start = Clock::now();
     size_t tot_length = 0;
@@ -120,8 +110,6 @@ int main(int argc, char* argv[]) {
         std::chrono::duration_cast<
             std::chrono::microseconds
         >(query_end - query_start).count();
-
-    std::cerr << "Answer queries done" << '\n';
 
 
     size_t ds_memory = ds->memory_usage();

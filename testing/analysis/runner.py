@@ -7,9 +7,9 @@ TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "traces")
 QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "queries")
 RESULT_DIR = os.path.join(BASE_DIR, "data", "results", "abbadingo")
 
-#FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
+FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
 #FILENAMES = ["small_test"]
-FILENAMES = ["trainA"]
+#FILENAMES = ["trainA"]
 
 FILE_PATHS_TRACES = [os.path.join(TRACE_DIR, fname + ".txt") for fname in FILENAMES]
 FILE_PATHS_QUERIES = [os.path.join(QUERY_DIR, fname + ".txt") for fname in FILENAMES]
@@ -29,9 +29,6 @@ def run_cpp(impl, inp):
         text=True,
         timeout=600
     )
-
-    print(result.stdout.strip())
-    print(result.stderr.strip())
 
     return result.stdout.strip().split(",")
 
@@ -69,7 +66,7 @@ def run_tests(dataset_id, inp_traces, inp_queries, outp):
         for _ in range(REPEAT):
             for impl in IMPLS:
                 row = run_cpp(impl, inp)
-                #writer.writerow([dataset_id] + row)
+                writer.writerow([dataset_id] + row)
 
 for i in range(len(FILENAMES)):
     dataset = FILENAMES[i]
