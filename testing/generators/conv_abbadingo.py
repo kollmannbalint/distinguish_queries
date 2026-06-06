@@ -18,9 +18,6 @@ RSEED = 8324932
 MAX_TOT_WORD_LENGTH = 200000
 MAX_QUERIES = 100000
 
-# print(FILE_PATHS_RAW_ABBADINGO)
-# print(FILE_PATHS_TRACES)
-# print(FILE_PATHS_QUERIES)
 
 def conv_abbadingo(path):
     P = []

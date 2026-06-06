@@ -3,23 +3,25 @@ import os
 import csv
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "traces")
-QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "queries")
-RESULT_DIR = os.path.join(BASE_DIR, "data", "results", "abbadingo")
+TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", "anti", "traces")
+QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", "anti", "queries")
+RESULT_DIR = os.path.join(BASE_DIR, "data", "results", "anti")
 
 #FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
 #FILENAMES = ["small_test"]
 #FILENAMES = ["trainA"]
 
-FILENAMES = ["trainA", "trainB", "train.1", "train.2",  "train.4", "train.5", "train.6", "train.7", "train.8", "train.9", "trainT"]
+FILENAMES = ["anti_naive1", "anti_naive2", "anti_naive3", "anti_naive4"]
+
+#FILENAMES = ["trainA", "trainB", "train.1", "train.2",  "train.4", "train.5", "train.6", "train.7", "train.8", "train.9", "trainT"]
 
 FILE_PATHS_TRACES = [os.path.join(TRACE_DIR, fname + ".txt") for fname in FILENAMES]
 FILE_PATHS_QUERIES = [os.path.join(QUERY_DIR, fname + ".txt") for fname in FILENAMES]
-FILE_PATH_CSV = os.path.join(RESULT_DIR, "abbadingo_results.csv")
+FILE_PATH_CSV = os.path.join(RESULT_DIR, "anti_naive.csv")
 EXE = os.path.join(BASE_DIR, "cpp", "build", "Release", "main_app.exe")
 
-IMPLS = ["naive", "precomp", "sqrt"]
-#IMPLS = ["sqrt"]
+#IMPLS = ["naive", "precomp", "sqrt"]
+IMPLS = ["naive", "sqrt"]
 REPEAT = 4
 
 def run_cpp(impl, inp):
@@ -32,6 +34,7 @@ def run_cpp(impl, inp):
             text=True,
             timeout=200
         )
+
 
         return result.stdout.strip().split(",")
 

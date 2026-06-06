@@ -21,7 +21,15 @@ inline int find_common_element_with_hist(const std::vector<int> &v){
 void DistinguishDsSqrt::build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) {
     trie = DoubleTrie(positive_words, negative_words);
     link_hist = std::vector<int>(trie.suffix_nodes.size(), 0);
-    threshold = (int)std::sqrt(trie.prefix_nodes.size() + trie.suffix_nodes.size());
+    //threshold = (int)std::sqrt(trie.prefix_nodes.size() + trie.suffix_nodes.size());
+    
+    int tot_sym = 0;
+    for(const std::string &w : positive_words)
+        tot_sym += w.size();
+    for(const std::string &w : negative_words)
+        tot_sym += w.size();
+
+    threshold = (int)std::sqrt(tot_sym);
 
     //in intersecting_pairs, the first key is positive, the second key is negative
     intersecting_pairs = std::unordered_map<long long, int>();

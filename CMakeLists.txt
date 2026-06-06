@@ -87,3 +87,13 @@ target_link_libraries(main_app
     PRIVATE dist_precomp
     PRIVATE dist_sqrt
 )
+
+if (MSVC)
+    target_link_options(main_app PRIVATE
+        /STACK:536870912
+    )
+elseif (MINGW)
+    target_link_options(main_app PRIVATE
+        -Wl,--stack,536870912
+    )
+endif()

@@ -134,6 +134,7 @@
       <LinkErrorReporting></LinkErrorReporting>
       <ProgramDataBaseFile>C:/Users/user/Desktop/uni/research_project/project/cpp/build/Debug/main_app.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
+      <StackReserveSize>536870912</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -191,6 +192,7 @@
       <LinkErrorReporting></LinkErrorReporting>
       <ProgramDataBaseFile>C:/Users/user/Desktop/uni/research_project/project/cpp/build/Release/main_app.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
+      <StackReserveSize>536870912</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -248,6 +250,7 @@
       <LinkErrorReporting></LinkErrorReporting>
       <ProgramDataBaseFile>C:/Users/user/Desktop/uni/research_project/project/cpp/build/MinSizeRel/main_app.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
+      <StackReserveSize>536870912</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -304,6 +307,7 @@
       <LinkErrorReporting></LinkErrorReporting>
       <ProgramDataBaseFile>C:/Users/user/Desktop/uni/research_project/project/cpp/build/RelWithDebInfo/main_app.pdb</ProgramDataBaseFile>
       <RandomizedBaseAddress></RandomizedBaseAddress>
+      <StackReserveSize>536870912</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
