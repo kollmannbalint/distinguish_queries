@@ -3,6 +3,26 @@ project(DistinguishDS)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+find_package(PostgreSQL REQUIRED)
+
+add_library(db_client INTERFACE)
+
+target_link_libraries(db_client INTERFACE PostgreSQL::PostgreSQL)
+
+add_library(dist_db
+    cpp/src/distinguish_ds_db.cpp
+)
+
+target_include_directories(dist_db
+    PUBLIC cpp/include
+)
+
+target_link_libraries(dist_db
+    PUBLIC db_client
+    PUBLIC double_trie
+)
 
 add_library(trie
     cpp/src/trie.cpp
@@ -86,6 +106,7 @@ target_link_libraries(main_app
     PRIVATE dist_naiv
     PRIVATE dist_precomp
     PRIVATE dist_sqrt
+    PRIVATE dist_db
 )
 
 if (MSVC)
@@ -97,3 +118,7 @@ elseif (MINGW)
         -Wl,--stack,536870912
     )
 endif()
+
+target_compile_definitions(main_app PRIVATE
+    PROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+)

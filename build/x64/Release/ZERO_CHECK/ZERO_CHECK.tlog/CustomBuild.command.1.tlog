@@ -1,0 +1,10 @@
+^C:\USERS\USER\DESKTOP\UNI\RESEARCH_PROJECT\PROJECT\BUILD\CMAKEFILES\168BF3278505BDAEF4812651A860C19D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/user/Desktop/uni/research_project/project -BC:/Users/user/Desktop/uni/research_project/project/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/user/Desktop/uni/research_project/project/build/DistinguishDS.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

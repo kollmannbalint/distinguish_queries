@@ -8,12 +8,18 @@
 #include <windows.h>
 #include <psapi.h>
 
+#include <fstream>
+#include <sstream>
+#include <unordered_map>
+#include <stdexcept>
+
 #pragma comment(lib, "Psapi.lib")
 
 #include "../include/distinguish_ds_abstract.h"
 #include "../include/distinguish_ds_naiv.h"
 #include "../include/distinguish_ds_precomp.h"
 #include "../include/distinguish_ds_sqrt.h"
+#include "distinguish_ds_db.h"
 
 // static size_t getPeakRSS() {
 //     PROCESS_MEMORY_COUNTERS info;
@@ -26,6 +32,32 @@
 
 //     return info.PeakWorkingSetSize;
 // }
+
+static std::unordered_map<std::string, std::string>
+load_db_config(const std::string& path)
+{
+    std::ifstream file(path);
+
+    if (!file)
+        throw std::runtime_error("Cannot open config file: " + path);
+
+    std::unordered_map<std::string, std::string> cfg;
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        if (line.empty() || line[0] == '#')
+            continue;
+
+        auto pos = line.find('=');
+        if (pos == std::string::npos)
+            continue;
+
+        cfg[line.substr(0, pos)] = line.substr(pos + 1);
+    }
+
+    return cfg;
+}
 
 int main(int argc, char* argv[]) {
     std::ios_base::sync_with_stdio(false);
@@ -46,6 +78,21 @@ int main(int argc, char* argv[]) {
         ds = std::make_unique<DistinguishDsPrecomp>();
     else if(impl == "sqrt")
         ds = std::make_unique<DistinguishDsSqrt>();
+    else if(impl == "db"){
+        std::string path = std::string(PROJECT_ROOT) + "/config/db_config.txt";
+        auto config_map = load_db_config("config/db_config.txt");
+
+        DBConfig cfg;
+
+        cfg.conninfo =
+            "host=" + config_map["host"] + " "
+            "port=" + config_map["port"] + " "
+            "dbname=" + config_map["dbname"] + " "
+            "user=" + config_map["user"] + " "
+            "password=" + config_map["password"];
+
+        ds = std::make_unique<DistinguishDsDB>(cfg);
+    }
     else{
         std::cerr << "Unknown implementation: " << impl << '\n';
         return 1;
@@ -72,6 +119,7 @@ int main(int argc, char* argv[]) {
             negative[i] = "";
     }
 
+
     int q;
     std::cin >> q;
     std::vector<std::pair<std::string, std::string>> queries(q);
@@ -85,7 +133,7 @@ int main(int argc, char* argv[]) {
     }
     
 
-    //std::vector<std::string> answers(q);
+    std::vector<std::string> answers(q);
 
     using Clock = std::chrono::high_resolution_clock;
     auto build_start = Clock::now();
