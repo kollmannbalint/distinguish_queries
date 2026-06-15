@@ -1,27 +1,33 @@
 import subprocess
 import os
 
+DATASET = "abbadingo"
+#DATASET = "stamina"
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-RAW_DIR = os.path.join(BASE_DIR, "data", "raw", "abbadingo")
-TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "traces")
-QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", "abbadingo", "queries")
+RAW_DIR = os.path.join(BASE_DIR, "data", "raw", DATASET)
+TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", DATASET, "traces")
+QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", DATASET, "queries")
 
 FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
 #FILENAMES = ["small_test"]
 
+#FILENAMES = [ (str(i) + "_training")  for i in range(1, 100)]
+
 FILE_PATHS_RAW_ABBADINGO = [os.path.join(RAW_DIR, fname) for fname in FILENAMES]
 FILE_PATHS_TRACES = [os.path.join(TRACE_DIR, fname + ".txt") for fname in FILENAMES]
 FILE_PATHS_QUERIES = [os.path.join(QUERY_DIR, fname + ".txt") for fname in FILENAMES]
-EXE = os.path.join(BASE_DIR, "cpp", "build", "Release", "gen_query.exe")
+EXE = os.path.join(BASE_DIR, "build", "Release", "gen_query.exe")
 
 RSEED = 8324932
-MAX_TOT_WORD_LENGTH = 200000
+MAX_TOT_WORD_LENGTH = 500000
 MAX_QUERIES = 100000
 
 
 def conv_abbadingo(path):
     P = []
     N = []
+    alphabetSize = 2
 
     with open(path, 'r') as f:
         
@@ -38,17 +44,17 @@ def conv_abbadingo(path):
             trace_str = "$"
             
             if k != 0:
-                trace_str = ''.join(chr(ord('a') + x) for x in trace)
+                trace_str = ''.join(chr(ord('A') + x) for x in trace)
 
             if label == 1:
                 P.append(trace_str)
             else:
                 N.append(trace_str)
         
-    return P, N
+    return P, N, alphabetSize
 
-def trace_sets_to_string(P, N):
-    parts = []
+def trace_sets_to_string(P, N, alphabetSize):
+    parts = [str(alphabetSize)]
     parts.append(str(len(P)))
     parts.extend(P)
     parts.append(str(len(N)))
@@ -71,8 +77,8 @@ def conv_abbadingo_dataset():
         finp = FILE_PATHS_RAW_ABBADINGO[i]
         foutp = FILE_PATHS_TRACES[i]
 
-        P,N = conv_abbadingo(finp)
-        outp = trace_sets_to_string(P,N)
+        P,N,alphabetSize = conv_abbadingo(finp)
+        outp = trace_sets_to_string(P,N,alphabetSize)
 
         with open(foutp, 'w') as f:    
             f.write(outp)
@@ -85,8 +91,10 @@ def gen_queries(rseed, max_queries, max_tot_word_length):
         fqueries = FILE_PATHS_QUERIES[i]
         P = []
         N = []
+        alphabetSize = 2
 
         with open(ftraces, 'r') as f:
+            alphabetSize = int(f.readline().strip())
             n = int(f.readline().strip())
             for _ in range(n):
                 trace = f.readline().strip()
@@ -96,7 +104,7 @@ def gen_queries(rseed, max_queries, max_tot_word_length):
                 trace = f.readline().strip()
                 N.append(trace)
 
-        query_gen_inp_list = [str(rseed), str(max_queries), str(max_tot_word_length)]
+        query_gen_inp_list = [str(rseed), str(max_queries), str(max_tot_word_length), str(alphabetSize)]
         query_gen_inp_list.append(str(len(P)))
         query_gen_inp_list += P
         query_gen_inp_list.append(str(len(N)))

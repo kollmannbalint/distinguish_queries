@@ -18,8 +18,8 @@ inline int find_common_element_with_hist(const std::vector<int> &v){
     return -1;
 }
 
-void DistinguishDsSqrt::build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) {
-    trie = DoubleTrie(positive_words, negative_words);
+void DistinguishDsSqrt::build(int alphabetSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) {
+    trie = DoubleTrie(alphabetSize, positive_words, negative_words);
     link_hist = std::vector<int>(trie.suffix_nodes.size(), 0);
     //threshold = (int)std::sqrt(trie.prefix_nodes.size() + trie.suffix_nodes.size());
     
@@ -153,4 +153,24 @@ size_t DistinguishDsSqrt::memory_usage() const {
     total += intersecting_pairs.size() * sizeof(std::pair<const long long, int>);
 
     return total;
+}
+
+size_t DistinguishDsSqrt::cnt_nodes() const {
+    return trie.prefix_nodes.size() + trie.suffix_nodes.size();
+}
+
+size_t DistinguishDsSqrt::cnt_links() const {
+    size_t res = 0;
+    for(const auto& x : trie.prefix_nodes){
+        res += x.positive_links.size() + x.negative_links.size();
+    }
+    return res;
+}
+
+long long DistinguishDsSqrt::cnt_distinguishable_suffixes() const {
+    long long res = 0;
+    for(const auto& x: trie.prefix_nodes){
+        res += 1ll * x.positive_links.size() * x.negative_links.size();
+    }
+    return res;
 }

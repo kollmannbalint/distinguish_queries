@@ -23,6 +23,9 @@ int main(){
     std::cin >> randseed >> max_queries >> max_tot_word_length;
     gen.seed(randseed);
 
+    int alphabetSize;
+    std::cin >> alphabetSize;
+
     int n;
     std::cin >> n;
     std::vector<std::string> positive(n);
@@ -43,7 +46,7 @@ int main(){
             negative[i] = "";
     }
 
-    DoubleTrie dt = DoubleTrie(positive, negative);
+    DoubleTrie dt = DoubleTrie(alphabetSize, positive, negative);
 
     std::vector<int> distinguishable_suffix_nodes;
     

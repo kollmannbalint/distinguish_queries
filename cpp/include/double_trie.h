@@ -6,7 +6,7 @@
 #include <unordered_set>
 
 struct DoubleTrieNode {
-    int children[alphabetSize];
+    std::vector<int> children;
     int parent;
     char char_from_par;
 
@@ -17,7 +17,7 @@ struct DoubleTrieNode {
 
     size_t memory_usage_dynamic() const;
 
-    DoubleTrieNode();
+    DoubleTrieNode(int alphaSize);
 };
 
 class DoubleTrie {
@@ -26,10 +26,12 @@ class DoubleTrie {
         std::vector<DoubleTrieNode> suffix_nodes;
 
         DoubleTrie();
-        DoubleTrie(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words);
+        DoubleTrie(int alphaSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words);
         void insert(const std::string &s, Label label);
         std::vector<int> insert_to_trie(std::vector<DoubleTrieNode> &trie_nodes, const std::string &s);
         int lookup(const std::vector<DoubleTrieNode> &trie, const std::string &s) const;
         std::string get_word(const std::vector<DoubleTrieNode> &trie, int id) const;
         size_t memory_usage() const;
+    private:
+        int alphabetSize;
 };

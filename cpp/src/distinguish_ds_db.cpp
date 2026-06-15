@@ -33,9 +33,9 @@ DistinguishDsDB::~DistinguishDsDB()
     }
 }
 
-void DistinguishDsDB::build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words)
+void DistinguishDsDB::build(int alphabetSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words)
 {
-    trie = DoubleTrie(positive_words, negative_words);
+    trie = DoubleTrie(alphabetSize, positive_words, negative_words);
 
     {
         PGresult* res = PQexec(conn, "TRUNCATE TABLE links;");
@@ -182,3 +182,22 @@ size_t DistinguishDsDB::memory_usage() const {
     return trie.memory_usage();
 }
 
+size_t DistinguishDsDB::cnt_nodes() const {
+    return trie.prefix_nodes.size() + trie.suffix_nodes.size();
+}
+
+size_t DistinguishDsDB::cnt_links() const {
+    size_t res = 0;
+    for(const auto& x : trie.prefix_nodes){
+        res += x.positive_links.size() + x.negative_links.size();
+    }
+    return res;
+}
+
+long long DistinguishDsDB::cnt_distinguishable_suffixes() const {
+    long long res = 0;
+    for(const auto& x: trie.prefix_nodes){
+        res += 1ll * x.positive_links.size() * x.negative_links.size();
+    }
+    return res;
+}

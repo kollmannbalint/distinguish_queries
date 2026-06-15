@@ -98,6 +98,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    int alphabetSize;
+    std::cin >> alphabetSize;
 
     int n;
     std::cin >> n;
@@ -137,7 +139,7 @@ int main(int argc, char* argv[]) {
 
     using Clock = std::chrono::high_resolution_clock;
     auto build_start = Clock::now();
-    ds->build(positive, negative);
+    ds->build(alphabetSize, positive, negative);
     auto build_end = Clock::now();
 
     auto query_start = Clock::now();
@@ -162,7 +164,19 @@ int main(int argc, char* argv[]) {
 
     size_t ds_memory = ds->memory_usage();
 
-    //Optionl todo: maybe also output total nodes, links and nodes in the distinguishing trie sets
+    size_t cnt_symbols = 0;
+    for(const auto& x : positive){
+        cnt_symbols += x.size();
+    }
+    for(const auto& x : negative){
+        cnt_symbols += x.size();
+    }
+
+    size_t cnt_nodes = ds->cnt_nodes();
+
+    size_t cnt_links = ds->cnt_links();
+
+    long long cnt_distinguishable_suffixes = ds->cnt_distinguishable_suffixes();
 
     std::cout
         << impl << ","
@@ -172,7 +186,11 @@ int main(int argc, char* argv[]) {
         << build_time << ","
         << query_time << ","
         << ds_memory << ","
-        << tot_length
+        << tot_length << ","
+        << cnt_symbols << ","
+        << cnt_nodes << ","
+        << cnt_links << ","
+        << cnt_distinguishable_suffixes
         << "\n";
 
 

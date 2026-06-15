@@ -19,10 +19,13 @@ public:
     DistinguishDsDB(const DBConfig& cfg);
     ~DistinguishDsDB();
 
-    void build(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) override;
+    void build(int alphabetSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) override;
     std::string query(const std::string& s1, const std::string& s2) const override;
     size_t memory_usage() const override;
     std::vector<std::string> execute_queries();
+    size_t cnt_nodes() const override;
+    size_t cnt_links() const override;
+    long long cnt_distinguishable_suffixes() const override;
 
 private:
     PGconn* conn;

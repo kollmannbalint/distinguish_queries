@@ -23,8 +23,8 @@ def anti_naiv_traces(aSufLen, randWordCnt, randWordLen, maxShortPrefLen, queryCn
 
     def unique_word():
         while True:
-            w = ''.join(random.choice("ab") for _ in range(randWordLen))
-            w = w[0] + "b" + w[2:]
+            w = ''.join(random.choice("AB") for _ in range(randWordLen))
+            w = w[0] + "B" + w[2:]
             if w not in used:
                 used.add(w)
                 return w
@@ -33,8 +33,8 @@ def anti_naiv_traces(aSufLen, randWordCnt, randWordLen, maxShortPrefLen, queryCn
     N = [unique_word() for _ in range(randWordCnt)]
     
 
-    wordA = "a" + "a" * aSufLen
-    wordB = "b" + "a" * aSufLen
+    wordA = "A" + "A" * aSufLen
+    wordB = "B" + "A" * aSufLen
 
     P += [wordA, wordB]
 
@@ -48,8 +48,8 @@ def anti_naiv_queries(aSufLen, randWordCnt, randWordLen, maxShortPrefLen, queryC
         lenA = random.choice(range(maxShortPrefLen))
         lenB = random.choice(range(maxShortPrefLen))
 
-        wordA = "a" + "a" * lenA
-        wordB = "b" + "a" * lenB
+        wordA = "A" + "A" * lenA
+        wordB = "B" + "A" * lenB
 
         if(random.choices([0,1])) == 1:
             queries.append((wordA, wordB))
@@ -71,7 +71,8 @@ for i in range (len(FILENAMES)):
     P,N = anti_naiv_traces(aSufLen, randWordCnt, randWordLen, maxShortPrefLen, queryCnt)
     queries = anti_naiv_queries(aSufLen, randWordCnt, randWordLen, maxShortPrefLen, queryCnt)
 
-    parts_traces = [str(len(P))]
+    parts_traces = ["2"]
+    parts_traces += [str(len(P))]
     parts_traces += P
     parts_traces += [str(len(N))]
     parts_traces += N

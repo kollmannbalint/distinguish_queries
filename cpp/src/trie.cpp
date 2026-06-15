@@ -1,17 +1,19 @@
 #include "trie.h"
 #include <iostream>
 
-TrieNode::TrieNode() : label(NONE){
-    std::fill(std::begin(children), std::end(children), EMPTY_NODE);
+TrieNode::TrieNode(int alphaSize) : label(NONE){
+    children = std::vector<int>(alphaSize, EMPTY_NODE);
 }
 
 
 Trie::Trie(){
-    nodes.emplace_back();
+    alphabetSize = 2;
+    nodes.push_back(TrieNode(alphabetSize));
 }
 
-Trie::Trie(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words){
-    nodes.emplace_back();
+Trie::Trie(int alphaSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words){
+    alphabetSize = alphaSize;
+    nodes.push_back(TrieNode(alphabetSize));
     for(const std::string& s : positive_words) {
         insert(s, POSITIVE);
     }
@@ -24,11 +26,11 @@ Trie::Trie(const std::vector<std::string> &positive_words, const std::vector<std
 void Trie::insert(const std::string &s, Label label){
     int cur = 0;
     for(char ch : s) {
-        int idx = ch - 'a';
+        int idx = ch - 'A';
 
         if(nodes[cur].children[idx] == EMPTY_NODE) {
             nodes[cur].children[idx] = (int) nodes.size();
-            nodes.emplace_back();
+            nodes.push_back(TrieNode(alphabetSize));
         }
 
         cur = nodes[cur].children[idx];
@@ -40,7 +42,7 @@ void Trie::insert(const std::string &s, Label label){
 int Trie::lookup(const std::string &s) const {
     int cur = 0;
     for(char ch : s) {
-        int idx = ch - 'a';
+        int idx = ch - 'A';
 
         cur = nodes[cur].children[idx];
         if (cur == EMPTY_NODE)
@@ -62,7 +64,7 @@ int Trie::distinguish_dfs(const int node1, const int node2, std::string &disting
             if(next_node1 != EMPTY_NODE && next_node2 != EMPTY_NODE){
                 int res = distinguish_dfs(next_node1, next_node2, distinguishing_suffix);
                 if(res != -1){
-                    distinguishing_suffix.push_back('a' + i);
+                    distinguishing_suffix.push_back('A' + i);
                     return 0;
                 }
             }

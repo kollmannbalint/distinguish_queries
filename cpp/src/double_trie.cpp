@@ -2,10 +2,10 @@
 #include <algorithm>
 #include <iostream>
 
-DoubleTrieNode::DoubleTrieNode() {
+DoubleTrieNode::DoubleTrieNode(int alphaSize) {
     parent = EMPTY_NODE;
     char_from_par = '$';
-    std::fill(std::begin(children), std::end(children), EMPTY_NODE);
+    children = std::vector<int>(alphaSize, EMPTY_NODE);
 }
 
 size_t DoubleTrieNode::memory_usage_dynamic() const {
@@ -23,14 +23,15 @@ size_t DoubleTrieNode::memory_usage_dynamic() const {
 }
 
 DoubleTrie::DoubleTrie(){
-    prefix_nodes.emplace_back();
-    suffix_nodes.emplace_back();  
+    alphabetSize = 2;
+    prefix_nodes.push_back(DoubleTrieNode(alphabetSize));
+    suffix_nodes.push_back(DoubleTrieNode(alphabetSize));
 }
 
-DoubleTrie::DoubleTrie(const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words){
-    prefix_nodes.emplace_back();
-    suffix_nodes.emplace_back();
-
+DoubleTrie::DoubleTrie(int alphaSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words){
+    alphabetSize = alphaSize;
+    prefix_nodes.push_back(DoubleTrieNode(alphabetSize));
+    suffix_nodes.push_back(DoubleTrieNode(alphabetSize));
     for(const std::string s : positive_words){
         insert(s, POSITIVE);
     }
@@ -40,9 +41,9 @@ DoubleTrie::DoubleTrie(const std::vector<std::string> &positive_words, const std
     }
 }
 
-void printvec(std::vector<int> v){
-    for(int x : v) std::cout << x << ' ';
-}
+// void printvec(std::vector<int> v){
+//     for(int x : v) std::cout << x << ' ';
+// }
 
 void DoubleTrie::insert(const std::string &s, Label label){
     std::vector<int> prefix_path = insert_to_trie(prefix_nodes, s);
@@ -77,11 +78,11 @@ std::vector<int> DoubleTrie::insert_to_trie(std::vector<DoubleTrieNode> &trie, c
     path.push_back(cur);
 
     for(char ch : s) {
-        int idx = ch - 'a';
+        int idx = ch - 'A';
 
         if (trie[cur].children[idx] == EMPTY_NODE) {
             trie[cur].children[idx] = (int) trie.size();
-            trie.emplace_back();
+            trie.push_back(DoubleTrieNode(alphabetSize));
             int nxt = trie[cur].children[idx];
             trie[nxt].parent = cur;
             trie[nxt].char_from_par = ch;
@@ -97,7 +98,7 @@ std::vector<int> DoubleTrie::insert_to_trie(std::vector<DoubleTrieNode> &trie, c
 int DoubleTrie::lookup(const std::vector<DoubleTrieNode> &trie, const std::string &s) const {
     int cur = 0;
     for (char ch : s) {
-        int idx = ch - 'a';
+        int idx = ch - 'A';
 
         cur = trie[cur].children[idx];
         if (cur == EMPTY_NODE)
