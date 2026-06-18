@@ -24,6 +24,8 @@ class Trie {
         std::string distinguish(const std::string &s1, const std::string &s2) const;
         int distinguish_dfs(const int node1, const int node2, std::string &distinguishing_suffix) const;
         size_t memory_usage() const;
+        double avg_overlap() const;
+        int overlap_size(int u, int v) const;
     private:
         int alphabetSize;
 };

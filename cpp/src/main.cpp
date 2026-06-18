@@ -172,12 +172,6 @@ int main(int argc, char* argv[]) {
         cnt_symbols += x.size();
     }
 
-    size_t cnt_nodes = ds->cnt_nodes();
-
-    size_t cnt_links = ds->cnt_links();
-
-    long long cnt_distinguishable_suffixes = ds->cnt_distinguishable_suffixes();
-
     std::cout
         << impl << ","
         << n << ","
@@ -186,11 +180,7 @@ int main(int argc, char* argv[]) {
         << build_time << ","
         << query_time << ","
         << ds_memory << ","
-        << tot_length << ","
-        << cnt_symbols << ","
-        << cnt_nodes << ","
-        << cnt_links << ","
-        << cnt_distinguishable_suffixes
+        << tot_length
         << "\n";
 
 

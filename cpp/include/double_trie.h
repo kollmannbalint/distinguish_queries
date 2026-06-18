@@ -32,6 +32,8 @@ class DoubleTrie {
         int lookup(const std::vector<DoubleTrieNode> &trie, const std::string &s) const;
         std::string get_word(const std::vector<DoubleTrieNode> &trie, int id) const;
         size_t memory_usage() const;
+        size_t cnt_links() const;
+        long long cnt_distinguishing_suffixes() const;
     private:
         int alphabetSize;
 };

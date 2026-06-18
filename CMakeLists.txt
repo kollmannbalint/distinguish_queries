@@ -92,6 +92,24 @@ target_link_libraries(gen_query
     PRIVATE double_trie
 )
 
+
+add_executable(ds_stats
+    testing/analysis/dataset_statistics.cpp
+)
+
+target_include_directories(ds_stats
+    PRIVATE cpp/include
+)
+
+target_link_libraries(ds_stats
+    PRIVATE trie
+    PRIVATE double_trie
+)
+
+
+
+
+
 add_executable(main_app
     cpp/src/main.cpp
 )
@@ -115,6 +133,16 @@ if (MSVC)
     )
 elseif (MINGW)
     target_link_options(main_app PRIVATE
+        -Wl,--stack,536870912
+    )
+endif()
+
+if (MSVC)
+    target_link_options(ds_stats PRIVATE
+        /STACK:536870912
+    )
+elseif (MINGW)
+    target_link_options(ds_stats PRIVATE
         -Wl,--stack,536870912
     )
 endif()

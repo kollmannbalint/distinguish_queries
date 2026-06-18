@@ -1,6 +1,7 @@
 #include "distinguish_ds_sqrt.h"
 #include <algorithm>
 #include <cmath>
+#include <random>
 
 std::vector<int> link_hist;
 
@@ -153,24 +154,4 @@ size_t DistinguishDsSqrt::memory_usage() const {
     total += intersecting_pairs.size() * sizeof(std::pair<const long long, int>);
 
     return total;
-}
-
-size_t DistinguishDsSqrt::cnt_nodes() const {
-    return trie.prefix_nodes.size() + trie.suffix_nodes.size();
-}
-
-size_t DistinguishDsSqrt::cnt_links() const {
-    size_t res = 0;
-    for(const auto& x : trie.prefix_nodes){
-        res += x.positive_links.size() + x.negative_links.size();
-    }
-    return res;
-}
-
-long long DistinguishDsSqrt::cnt_distinguishable_suffixes() const {
-    long long res = 0;
-    for(const auto& x: trie.prefix_nodes){
-        res += 1ll * x.positive_links.size() * x.negative_links.size();
-    }
-    return res;
 }

@@ -1,0 +1,5 @@
+dataset,alphabet_size,positive_set_size,negative_set_size,avg_word_len,cnt_symbols,cnt_nodes_trie,cnt_nodes_double_trie,cnt_links,cnt_distinguishable_prefix_pairs,avg_overlap
+anti_naive1,2,17,15,90.6875,2902,2752,4543,2934,498,177.287
+anti_naive2,2,2,0,1e+06,2000002,2000003,3000006,2000004,0,338095
+anti_naive3,2,2,0,50001,100002,100003,150006,100004,0,16912
+anti_naive4,2,102,100,1188.13,240002,238509,377191,240204,20359,23564.7

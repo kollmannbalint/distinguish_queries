@@ -5,6 +5,7 @@ C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/dist_naiv.di
 C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/dist_precomp.dir
 C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/dist_sqrt.dir
 C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/gen_query.dir
+C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/ds_stats.dir
 C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/main_app.dir
 C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/ALL_BUILD.dir
 C:/Users/user/Desktop/uni/research_project/project/build/CMakeFiles/ZERO_CHECK.dir

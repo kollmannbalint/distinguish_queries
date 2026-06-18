@@ -1,5 +1,0 @@
-dataset,status,impl,positive_set_size,negative_set_size,number_of_queries,build_time_us,query_time_us,memory_bytes,total_output_len
-trainA,OK,db,2433,2023,26183,373320,47339082,12510940,257665
-trainA,OK,db,2433,2023,26183,327733,43550614,12510940,258644
-trainA,OK,db,2433,2023,26183,481784,40004848,12510940,259404
-trainA,OK,db,2433,2023,26183,393183,41666301,12510940,259063

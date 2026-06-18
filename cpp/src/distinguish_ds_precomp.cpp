@@ -46,23 +46,3 @@ size_t DistinguishDsPrecomp::memory_usage() const {
 
     return total;
 }
-
-size_t DistinguishDsPrecomp::cnt_nodes() const {
-    return trie.prefix_nodes.size() + trie.suffix_nodes.size();
-}
-
-size_t DistinguishDsPrecomp::cnt_links() const {
-    size_t res = 0;
-    for(const auto& x : trie.prefix_nodes){
-        res += x.positive_links.size() + x.negative_links.size();
-    }
-    return res;
-}
-
-long long DistinguishDsPrecomp::cnt_distinguishable_suffixes() const {
-    long long res = 0;
-    for(const auto& x: trie.prefix_nodes){
-        res += 1ll * x.positive_links.size() * x.negative_links.size();
-    }
-    return res;
-}

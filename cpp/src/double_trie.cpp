@@ -1,6 +1,7 @@
 #include "double_trie.h"
 #include <algorithm>
 #include <iostream>
+#include <random>
 
 DoubleTrieNode::DoubleTrieNode(int alphaSize) {
     parent = EMPTY_NODE;
@@ -130,4 +131,22 @@ size_t DoubleTrie::memory_usage() const {
         total += node.memory_usage_dynamic();
 
     return total;
+}
+
+
+
+size_t DoubleTrie::cnt_links() const {
+    size_t res = 0;
+    for(const auto& x : prefix_nodes){
+        res += x.positive_links.size() + x.negative_links.size();
+    }
+    return res;
+}
+
+long long DoubleTrie::cnt_distinguishing_suffixes() const {
+    long long res = 0;
+    for(const auto& x : suffix_nodes){
+        res += 1ll * x.positive_links.size() * x.negative_links.size();
+    }
+    return res;
 }

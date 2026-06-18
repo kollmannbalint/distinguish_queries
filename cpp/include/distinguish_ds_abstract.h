@@ -8,7 +8,4 @@ class DistinguishDsAbstract {
         virtual void build(int alphabetSize, const std::vector<std::string> &positive_words, const std::vector<std::string> &negative_words) = 0;
         virtual std::string  query(const std::string &s1, const std::string &s2) const = 0;
         virtual size_t memory_usage() const = 0;
-        virtual size_t cnt_nodes() const = 0;
-        virtual size_t cnt_links() const = 0;
-        virtual long long cnt_distinguishable_suffixes() const = 0;
 };

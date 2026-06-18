@@ -11,16 +11,3 @@ std::string DistinguishDsNaiv::query(const std::string& s1, const std::string& s
 size_t DistinguishDsNaiv::memory_usage() const {
     return trie.memory_usage();
 }
-
-size_t DistinguishDsNaiv::cnt_nodes() const {
-    return trie.nodes.size();
-}
-
-size_t DistinguishDsNaiv::cnt_links() const {
-    return 0;
-}
-
-long long DistinguishDsNaiv::cnt_distinguishable_suffixes() const {
-    //it is calculated in the other versions
-    return -1;
-}

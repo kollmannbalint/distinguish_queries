@@ -1,5 +1,6 @@
 #include "trie.h"
 #include <iostream>
+#include <random>
 
 TrieNode::TrieNode(int alphaSize) : label(NONE){
     children = std::vector<int>(alphaSize, EMPTY_NODE);
@@ -94,4 +95,47 @@ std::string Trie::distinguish(const std::string &s1, const std::string &s2) cons
 
 size_t Trie::memory_usage() const {
     return nodes.capacity() * sizeof(TrieNode);
+}
+
+std::mt19937 gen_;
+const int randseed_ = 8324932;
+
+int random_int_(int low, int high) {
+    std::uniform_int_distribution<> dist(low, high);
+    return dist(gen_);
+}
+
+double Trie::avg_overlap() const {
+    gen_.seed(randseed_);
+    const int reps = 10000;
+    long long tot_overlap = 0;
+
+    for(int i = 0; i < reps; i++){
+        int u = random_int_(0, nodes.size() - 1);
+        int v = random_int_(0, nodes.size() - 1);
+
+        int cur_overlap = overlap_size(u,v);
+        tot_overlap += cur_overlap;
+    }
+
+    return 1.0 * tot_overlap / reps;
+}
+
+int Trie::overlap_size(int u, int v) const {
+    const TrieNode &nu = nodes[u];
+    const TrieNode &nv = nodes[v];
+
+    if(isContradiction(nu.label, nv.label)){
+        return 0;
+    }
+
+    int res = 1;
+
+    for(int i = 0; i < alphabetSize; i++){
+        if(nu.children[i] != EMPTY_NODE && nv.children[i] != EMPTY_NODE){
+            res += overlap_size(nu.children[i], nv.children[i]);
+        }
+    }
+
+    return res;
 }

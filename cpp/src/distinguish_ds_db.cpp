@@ -181,23 +181,3 @@ std::string DistinguishDsDB::query(const std::string& s1, const std::string& s2)
 size_t DistinguishDsDB::memory_usage() const {
     return trie.memory_usage();
 }
-
-size_t DistinguishDsDB::cnt_nodes() const {
-    return trie.prefix_nodes.size() + trie.suffix_nodes.size();
-}
-
-size_t DistinguishDsDB::cnt_links() const {
-    size_t res = 0;
-    for(const auto& x : trie.prefix_nodes){
-        res += x.positive_links.size() + x.negative_links.size();
-    }
-    return res;
-}
-
-long long DistinguishDsDB::cnt_distinguishable_suffixes() const {
-    long long res = 0;
-    for(const auto& x: trie.prefix_nodes){
-        res += 1ll * x.positive_links.size() * x.negative_links.size();
-    }
-    return res;
-}
