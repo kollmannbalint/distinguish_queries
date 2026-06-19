@@ -3,8 +3,8 @@ import os
 import csv
 import pandas as pd
 
-#DATASET = "abbadingo"
-DATASET = "stamina"
+DATASET = "abbadingo"
+#DATASET = "stamina"
 #DATASET = "anti"
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -12,14 +12,14 @@ TRACE_DIR = os.path.join(BASE_DIR, "data", "generated", DATASET, "traces")
 QUERY_DIR = os.path.join(BASE_DIR, "data", "generated", DATASET, "queries")
 RESULT_DIR = os.path.join(BASE_DIR, "data", "results", DATASET)
 
-#FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
-FILENAMES = [ (str(i) + "_training")  for i in range(1, 100)]
+FILENAMES = ["trainA", "trainB", "trainC", "trainD", "train.1", "train.2", "train.3", "trainR", "train.4", "train.5", "train.6", "trainS", "train.7", "train.8", "train.9", "trainT"]
+#FILENAMES = [ (str(i) + "_training")  for i in range(1, 100)]
 #FILENAMES = ["anti_naive1", "anti_naive2", "anti_naive3", "anti_naive4"]
 
 
 FILE_PATHS_TRACES = [os.path.join(TRACE_DIR, fname + ".txt") for fname in FILENAMES]
 FILE_PATHS_QUERIES = [os.path.join(QUERY_DIR, fname + ".txt") for fname in FILENAMES]
-FILE_PATH_TEST_CSV = os.path.join(RESULT_DIR, "anti_naive_results.csv")
+FILE_PATH_TEST_CSV = os.path.join(RESULT_DIR, "abbadingo_test_results.csv")
 FILE_PATH_STATS_CSV = os.path.join(RESULT_DIR, "stamina_stats.csv")
 EXE_TEST = os.path.join(BASE_DIR, "build", "Release", "main_app.exe")
 EXE_STATS = os.path.join(BASE_DIR, "build", "Release", "ds_stats.exe")
@@ -169,7 +169,7 @@ def conv_to_latex(path):
         float_format="%.2f"
     ))
 
-#run_all_tests()
+run_all_tests()
 #run_all_statistics()
 
-conv_to_latex(FILE_PATH_STATS_CSV)
+#conv_to_latex(FILE_PATH_STATS_CSV)
